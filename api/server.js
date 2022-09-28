@@ -16,10 +16,12 @@ const PORT = process.env.PORT || 5000;
 
 io.on('connection', (socket) => {
 
-    io.emit('message', message.parse('bot','Welcome to ChatHub!'));
+    socket.emit('message', message.parse('bot','Welcome to ChatHub!'));
+
+    socket.broadcast.emit('message', message.parse('bot','Dave has joined the chat!'));
 
     socket.on('disconnect', () => {
-        io.broadcast.emit('message', message.parse('bot','User has left the chat'));
+        io.emit('message', message.parse('bot','User has left the chat'));
     });
 })
 

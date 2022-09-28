@@ -18,11 +18,15 @@
         </div>
         
       </div>
-      
-      <div class="h-fit my-2 w-full flex justify-center items-center text-gray-500">
-        <i class="uil uil-megaphone mx-2"></i>
-        <p>William joined the chat</p>
+
+      <div v-for="x in messages" class="flex" id="msg-ctn" :key="x.id" >
+        <BotMessage  v-if="x.username === 'bot'" :message=x.message />
+
+        <ChatMessage  v-else-if="x.username !== 'bot'" :time="x.time" :message=x.message :username=x.username :key="updateKey" />
+
       </div>
+
+
 
     </div>
 
@@ -40,6 +44,9 @@
 
 <script setup>
 import IconButton from "../components/IconButton.vue";
+import BotMessage from "../components/BotMessage.vue";
+import ChatMessage from "../components/ChatMessage.vue";
+import {reactive, ref} from "vue";
 
 const img = "https://jesulonimii.codes/img/me.jpg"
 
@@ -52,8 +59,13 @@ const props = defineProps({
 })
 const socket = props.socket
 
-socket.on('message', message => {
-  console.log(message)
+let messages = ref([])
+const container = document.querySelector('#msg-ctn')
+
+socket.on('message', async msg => {
+
+  messages.value.push(msg)
+
 
 })
 
