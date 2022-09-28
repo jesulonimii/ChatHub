@@ -1,0 +1,17 @@
+
+
+node_modules
+*/node_modules
+*/.idea
+*/.vscode
+*/.git
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
