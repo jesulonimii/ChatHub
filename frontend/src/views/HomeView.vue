@@ -19,10 +19,13 @@
         
       </div>
 
+      <ChatMessageOut   time="7.00 pm" message='Lorem ipsum ejokw eujksikje esjkes ejk ed' username='Me' />
+
+
       <div v-for="x in messages" class="flex" id="msg-ctn" :key="x.id" >
         <BotMessage  v-if="x.username === 'bot'" :message=x.message />
 
-        <ChatMessage  v-else-if="x.username !== 'bot'" :time="x.time" :message=x.message :username=x.username :key="updateKey" />
+        <ChatMessageIn  v-else-if="x.username !== 'bot'" :time="x.time" :message=x.message :username=x.username :key="updateKey" />
 
       </div>
 
@@ -32,9 +35,9 @@
 
     <div class="w-full bg-amber-300 h-[10%] flex lg:px-80 sticky bottom-0">
       <div class="w-full flex p-1">
-        <input type="text" class="outline-0 w-full px-4 p bg-amber-200" placeholder="Type a message..."/>
+        <input id="input" type="text" class="outline-0 w-full px-4 p bg-amber-200" placeholder="Type a message..."/>
       </div>
-      <IconButton icon="message" link="" class="w-[15%] flex justify-center items-center text-white dark:text-gray-900 bg-amber-300"/>
+      <IconButton @click="sendMsg()" icon="message" link="" class="w-[15%] flex justify-center items-center text-white dark:text-gray-900 bg-amber-300"/>
 
 
     </div>
@@ -45,8 +48,10 @@
 <script setup>
 import IconButton from "../components/IconButton.vue";
 import BotMessage from "../components/BotMessage.vue";
-import ChatMessage from "../components/ChatMessage.vue";
-import {reactive, ref} from "vue";
+import ChatMessageIn from "../components/ChatMessageIn.vue";
+import ChatMessageOut from "../components/ChatMessageOut.vue";
+
+import {ref} from "vue";
 
 const img = "https://jesulonimii.codes/img/me.jpg"
 
@@ -55,6 +60,10 @@ const props = defineProps({
   socket: {
     type: Object,
     required: false,
+  },
+  name: {
+    type: String,
+    required: true,
   }
 })
 const socket = props.socket
@@ -68,5 +77,20 @@ socket.on('message', async msg => {
 
 
 })
+
+const sendMsg = () => {
+
+
+
+  const input = document.querySelector('#input')
+  const msg = input.value.trim()
+
+  if (msg !== '') {
+    socket.emit('chatMessage', msg)
+    input.value = ''
+  }
+
+
+}
 
 </script>

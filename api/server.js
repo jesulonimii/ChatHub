@@ -20,6 +20,11 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('message', message.parse('bot','Dave has joined the chat!'));
 
+    socket.on('chatMessage', (msg) => {
+        io.emit('message', message.parse('bot', msg))
+    });
+
+
     socket.on('disconnect', () => {
         io.emit('message', message.parse('bot','User has left the chat'));
     });
