@@ -3,20 +3,28 @@ const app = express();
 const socket = require('socket.io');
 const http = require('http');
 const server = http.createServer(app);
-const io = socket(server);
+const io = socket(server, {
+    cors: {
+        origin: "http://localhost:5001",
+        methods: ["GET", "POST"]
+    }
+});
+
+const message = require('./models/message.model.js');
+
 const PORT = process.env.PORT || 5000;
 
 io.on('connection', (socket) => {
-    console.log('New client connected');
 
+    io.emit('message', message.parse('bot','Welcome to ChatHub!'));
 
     socket.on('disconnect', () => {
-        console.log('Client disconnected');
+        io.broadcast.emit('message', message.parse('bot','User has left the chat'));
     });
-}
+})
 
 
 
 server.listen(PORT, () => {
-    console.log(`Server has started on port ${PORT}\nLocal:  http://localhost:${PORT}`);
+    console.log(`\nServer has started on port ${PORT}\nLocal:  http://localhost:${PORT}\n`);
 });
