@@ -21,7 +21,7 @@ let active_users = []
 io.on('connection', (socket) => {
 
     socket.on('chatMessage', (payload) => {
-        io.emit('message', message.parse(payload.username, payload.message))
+        io.emit('message', message.parse(payload.username, payload.message, payload.img));
     });
 
     socket.on('login', (data) => {
@@ -33,10 +33,10 @@ io.on('connection', (socket) => {
 
     socket.on('logged-in', (data) => {
 
-        socket.emit('message', message.parse('bot','Welcome to ChatHub!'));
+        socket.emit('message', message.parse('bot','Welcome to ChatHub!', data.img));
 
         console.log(data)
-        socket.broadcast.emit('message', message.parse('bot',`${data.username} has joined the chat!`));
+        socket.broadcast.emit('message', message.parse('bot',`${data.username} has joined the chat!`, data.img));
     });
 
     socket.on('disconnect', () => {

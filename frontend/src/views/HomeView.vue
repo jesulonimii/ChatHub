@@ -11,8 +11,8 @@
         <BotMessage  v-if="x.username === 'bot'" :message=x.message />
         
         <div v-else class="flex w-full">
-          <ChatMessageOut v-if="x.username === username" :message=x.message :username=x.username :img="img2" :time="x.time" />
-          <ChatMessageIn v-else :message=x.message :username=x.username :img="img" :time="x.time"  />
+          <ChatMessageOut v-if="x.username === username" :message=x.message :username=x.username :img="x.img" :time="x.time" />
+          <ChatMessageIn v-else :message=x.message :username=x.username :img="x.img" :time="x.time"  />
         </div>
 
 
@@ -23,7 +23,7 @@
     <form @submit="handleEnterPress" class="w-full bg-amber-300 h-[10%] flex lg:px-80 sticky bottom-0">
 
       <div class="w-full flex p-1">
-        <input id="input" type="text" class="outline-0 w-full px-4 p bg-amber-200" placeholder="Type a message..."/>
+        <input id="input" autocomplete="off" type="text" class="outline-0 w-full px-4 p bg-amber-200" placeholder="Type a message..."/>
       </div>
       <IconButton type="submit" @click="sendMsg()" icon="message" link="" class="w-[15%] flex justify-center items-center text-white dark:text-gray-900 bg-amber-300"/>
 
@@ -51,7 +51,7 @@ var nameList = [
   'Time','Past','Future','Dev',
   'Fly','Flying','Soar','Soaring','Power','Falling',
   'Fall','Jump','Cliff','Mountain','Rend','Red','Blue',
-  'Green','Yellow','Gold','Demon','Demonic','Panda','Cat',
+  'Green','Yellow','Gold','Panda','Cat',
   'Kitty','Kitten','Zero','Memory','Trooper','XX','Bandit',
   'Fear','Light','Glow','Tread','Deep','Deeper','Deepest',
   'Mine','Your','Worst','Enemy','Hostile','Force','Video',
@@ -69,7 +69,7 @@ var nameList = [
   'Zombie','Sarge','Capt','Captain','Punch','One','Two','Uno','Slice',
   'Slash','Melt','Melted','Melting','Fell','Wolf','Hound',
   'Legacy','Sharp','Dead','Mew','Chuckle','Bubba','Bubble','Sandwich',
-  'Smasher','Extreme','Multi','Universe','Ultimate','Death','Ready','Monkey',   'Elevator','Wrench','Grease','Head','Theme','Grand','Cool','Kid','Boy',
+  'Smasher','Extreme','Multi','Universe','Ultimate','Ready','Monkey',   'Elevator','Wrench','Grease','Head','Theme','Grand','Cool','Kid','Boy',
   'Girl','Vortex','Paradox'
 ];
 
@@ -90,7 +90,9 @@ if (!username) {
   username = route.query.username
 }
 
-const messagesContainer = document.querySelector('#msg-ctn')
+//const bottomPoint = document.querySelector('#bottomPoint')
+
+
 
 //display messages
 let messages = ref([])
@@ -98,9 +100,10 @@ socket.on('message', msg => {
 
   messages.value.push(msg)
 
-  messagesContainer.scrollTop = messagesContainer.scrollHeight
+  //bottomPoint.scrollIntoView({behavior: 'smooth'});
+  const container = document.querySelector('#msg-ctn')
 
-
+  container.scrollTop = 10000000;
 
 })
 
@@ -118,7 +121,8 @@ const sendMsg = () => {
 
   const messagePayload = {
     username: username,
-    message: msg
+    message: msg,
+    img: img2,
   }
 
   if (msg !== '') {
