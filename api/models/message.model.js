@@ -1,9 +1,9 @@
 const moment = require("moment");
 
-exports.parse = (username, message) => {
+exports.parse = (username, message, img) => {
     return {
         id: Math.floor(Math.random() * 10000),
-        img: "https://avatars.dicebear.com/api/avataaars/" + username + ".svg",
+        img: img,
         username: username,
         message: message,
         time: moment().format('h:mm a'),

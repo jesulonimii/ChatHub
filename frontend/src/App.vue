@@ -11,12 +11,14 @@
 </template>
 
 <script setup>
-import {RouterLink, RouterView} from 'vue-router'
+import {RouterLink, RouterView, useRoute} from 'vue-router'
 
 import io from 'socket.io-client'
 
-const socket = io('http://localhost:5000')
+const route = useRoute()
+const socketAddress = `${window.location.hostname}:5000`
 
+const socket = io(socketAddress)
 
 </script>
 
