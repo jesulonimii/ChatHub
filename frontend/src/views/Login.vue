@@ -8,9 +8,9 @@
     <form @submit="handleEnterPress" class="w-full bg-gray-200 dark:bg-gray-900 justify-center items-center text-black dark:text-white h-full flex flex-col py-8 px-8 lg:px-[30%]">
 
       <p id="info"></p>
-      <input @keyup="checkUsername($event)" v-model=username type="text" class="w-full py-4 px-4 focus:border border-amber-300 rounded-md outline-0" placeholder="Enter a username">
-      <router-link type="submit" id="next"  v-if="username" :to="`/chat?username=${username}`"  class="hidden w-full p-4 bg-amber-500 my-4 h-[10%] rounded-md flex justify-center items-center text-white">
-        Continue as {{username}}
+      <input @keyup="checkUsername($event)" v-model=dUsername type="text" class="w-full py-4 px-4 focus:border border-amber-300 rounded-md outline-0" placeholder="Enter a username">
+      <router-link type="submit" id="next"  v-if="dUsername" :to="`/chat?username=${dUsername}`"  class="hidden w-full p-4 bg-amber-500 my-4 h-[10%] rounded-md flex justify-center items-center text-white">
+        Continue as {{dUsername}}
       </router-link>
       <router-link to="/chat" class="text-amber-500 w-fit my-4">Continue with Random name</router-link>
 
@@ -38,6 +38,8 @@ const props = defineProps({
     type: String,
   }
 })
+
+const dUsername = ref(props.username)
 
 const socket =props.socket
 

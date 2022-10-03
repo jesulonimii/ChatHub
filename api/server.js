@@ -81,12 +81,10 @@ io.on('connection', (socket) => {
     });
 })
 
-app.get('/', (req, res) => {
-    res.send('ChatHub API is running!');
-})
 
 
-
+//test frontend in production
+app.use(express.static('./../frontend/dist'))
 
 server.listen(PORT, () => {
     console.log(`\nServer has started on port ${PORT}\nLocal:  http://${process.env.HOSTNAME}:${PORT}\n`);
