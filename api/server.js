@@ -5,15 +5,19 @@ const http = require('http');
 const server = http.createServer(app);
 const message = require('./models/message.model.js');
 const user = require('./models/user.model.js');
+const dotenv = require('dotenv').config({path: './.env'})
+
+
+
+//allow socket connection from following hosts
+const allowedOrigins = process.env.ALLOWED_SOCKET_ORIGIN_HOST.split(',') || ['http://localhost:5001', 'http://192.168.0.102:5001'];
 
 const io = socket(server, {
     cors: {
-        origin: ["http://localhost:5001", "http://192.168.0.102:5001"],
+        origin: allowedOrigins,
         methods: ["GET", "POST"]
     }
 });
-
-
 
 
 const PORT = process.env.PORT || 5000;
@@ -28,14 +32,20 @@ io.on('connection', (socket) => {
 
     socket.on('check-username', (username) => {
 
-        active_users.forEach((value, key) => {
-            if (username.toLowerCase() === value.username.toLowerCase()) {
-                socket.emit("username-taken", {username: username, taken: true});
-            }
-            else {
-                socket.emit("username-taken", {username: username, taken: false});
-            }
-        })
+        if (active_users.size === 0) {
+            socket.emit("username-taken", {username: username, taken: false});
+        }
+        else {
+            active_users.forEach((value, key) => {
+                if (username.toLowerCase() === value.username.toLowerCase()) {
+                    socket.emit("username-taken", {username: username, taken: true});
+                }
+                else {
+                    socket.emit("username-taken", {username: username, taken: false});
+                }
+            })
+        }
+
 
 
     });
@@ -71,9 +81,13 @@ io.on('connection', (socket) => {
     });
 })
 
+app.get('/', (req, res) => {
+    res.send('ChatHub API is running!');
+})
+
 
 
 
 server.listen(PORT, () => {
-    console.log(`\nServer has started on port ${PORT}\nLocal:  http://localhost:${PORT}\n`);
+    console.log(`\nServer has started on port ${PORT}\nLocal:  http://${process.env.HOSTNAME}:${PORT}\n`);
 });

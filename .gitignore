@@ -5,6 +5,7 @@ node_modules
 */.idea
 */.vscode
 */.git
+*/.env
 
 # Editor directories and files
 .idea
